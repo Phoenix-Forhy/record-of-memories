@@ -23,6 +23,8 @@ public class RecollectionsVO extends BaseEntity
     @Excel(name = "回忆录名称")
     private String recollectionName;
 
+    /** 创建人名称 */
+    @Excel(name = "创建人名称")
     private String createByName;
 
     public String getCreateByName() {

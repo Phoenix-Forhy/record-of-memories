@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MemoryMapper">
+    
+    <resultMap type="Memory" id="MemoryResult">
+        <result property="memoryId"    column="memory_id"    />
+        <result property="memoryName"    column="memory_name"    />
+        <result property="memoryImg"    column="memory_img"    />
+        <result property="memoryTime"    column="memory_time"    />
+        <result property="recollectionId"    column="recollection_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+    <resultMap type="MemoryVO" id="MemoryVOResult">
+            <result property="memoryId"    column="memory_id"    />
+            <result property="memoryName"    column="memory_name"    />
+            <result property="memoryImg"    column="memory_img"    />
+            <result property="memoryTime"    column="memory_time"    />
+            <result property="recollectionId"    column="recollection_id"    />
+
+            <result property="recollectionName"    column="recollection_name"    />
+
+            <result property="createBy"    column="create_by"    />
+
+            <result property="createByName"    column="create_by_name"    />
+
+            <result property="createTime"    column="create_time"    />
+            <result property="updateBy"    column="update_by"    />
+            <result property="updateTime"    column="update_time"    />
+            <result property="remark"    column="remark"    />
+        </resultMap>
+
+    <sql id="selectMemoryVo">
+        SELECT
+            m.memory_id AS memory_id,
+            m.memory_name AS memory_name,
+            m.memory_img AS memory_img,
+            m.memory_time AS memory_time,
+            m.recollection_id AS recollection_id,
+            m.create_by AS create_by,
+            sdd.dict_label AS create_by_name,
+            m.create_time AS create_time,
+            m.update_by AS update_by,
+            m.update_time AS update_time,
+            m.remark AS remark,
+            r.recollection_name AS recollection_name
+        FROM memory m
+        LEFT JOIN (
+            SELECT recollection_id, recollection_name
+            FROM recollections
+        ) r ON m.recollection_id = r.recollection_id
+        LEFT JOIN (
+            SELECT dict_value,dict_label
+            FROM sys_dict_data
+            WHERE dict_type = 'we'
+        ) sdd
+        ON m.create_by = sdd.dict_value
+    </sql>
+
+    <select id="selectMemoryList" parameterType="Memory" resultMap="MemoryVOResult">
+        <include refid="selectMemoryVo"/>
+        <where>  
+            <if test="memoryName != null  and memoryName != ''"> and memory_name like concat('%', #{memoryName}, '%')</if>
+            <if test="params.beginMemoryTime != null and params.beginMemoryTime != '' and params.endMemoryTime != null and params.endMemoryTime != ''"> and memory_time between #{params.beginMemoryTime} and #{params.endMemoryTime}</if>
+            <if test="recollectionId != null "> and recollection_id = #{recollectionId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectMemoryByMemoryId" parameterType="Long" resultMap="MemoryResult">
+        <include refid="selectMemoryVo"/>
+        where memory_id = #{memoryId}
+    </select>
+        
+    <insert id="insertMemory" parameterType="Memory" useGeneratedKeys="true" keyProperty="memoryId">
+        insert into memory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memoryName != null and memoryName != ''">memory_name,</if>
+            <if test="memoryImg != null">memory_img,</if>
+            <if test="memoryTime != null">memory_time,</if>
+            <if test="recollectionId != null">recollection_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memoryName != null and memoryName != ''">#{memoryName},</if>
+            <if test="memoryImg != null">#{memoryImg},</if>
+            <if test="memoryTime != null">#{memoryTime},</if>
+            <if test="recollectionId != null">#{recollectionId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemory" parameterType="Memory">
+        update memory
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memoryName != null and memoryName != ''">memory_name = #{memoryName},</if>
+            <if test="memoryImg != null">memory_img = #{memoryImg},</if>
+            <if test="memoryTime != null">memory_time = #{memoryTime},</if>
+            <if test="recollectionId != null">recollection_id = #{recollectionId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where memory_id = #{memoryId}
+    </update>
+
+    <delete id="deleteMemoryByMemoryId" parameterType="Long">
+        delete from memory where memory_id = #{memoryId}
+    </delete>
+
+    <delete id="deleteMemoryByMemoryIds" parameterType="String">
+        delete from memory where memory_id in 
+        <foreach item="memoryId" collection="array" open="(" separator="," close=")">
+            #{memoryId}
+        </foreach>
+    </delete>
+</mapper>
