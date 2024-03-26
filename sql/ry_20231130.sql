@@ -698,3 +698,32 @@ create table gen_table_column (
   update_time       datetime                                   comment '更新时间',
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
+-- ----------------------------
+-- 20、回忆录表
+-- ----------------------------
+CREATE TABLE recollections (
+ recollection_id           bigint(20)      not null auto_increment    comment '回忆录id',
+ recollection_name         varchar(64)     default ''                 comment '回忆录名称',
+ create_by         varchar(64)     default ''                 comment '创建者',
+ create_time       datetime                                   comment '创建时间',
+ update_by         varchar(64)     default ''                 comment '更新者',
+ update_time       datetime                                   comment '更新时间',
+ remark            varchar(500)    default null               comment '备注',
+ primary key (recollection_id)
+) engine=innodb auto_increment=200 comment = '回忆录表';
+-- ----------------------------
+-- 21、回忆表
+-- ----------------------------
+CREATE TABLE memory (
+ memory_id           bigint(20)      not null auto_increment    COMMENT '回忆id',
+ memory_name          varchar(64)     default ''                 COMMENT '回忆名',
+ memory_img         varchar(128)     default ''                 COMMENT '回忆图片',
+ memory_time TIME  COMMENT '持续时间',
+ recollection_id           bigint(20)      COMMENT '回忆录id',
+ create_by         varchar(64)     default ''                 comment '创建者',
+ create_time       datetime                                   comment '创建时间',
+ update_by         varchar(64)     default ''                 comment '更新者',
+ update_time       datetime                                   comment '更新时间',
+ remark            varchar(500)    default null               comment '备注',
+ primary key (memory_id)
+) engine=innodb auto_increment=1000 comment = '回忆表';
