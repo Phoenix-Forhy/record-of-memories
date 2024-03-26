@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="回忆录名称" prop="recollectionName">
+      <el-form-item label="名称" prop="recollectionName">
         <el-input
           v-model="queryParams.recollectionName"
           placeholder="请输入回忆录名称"
