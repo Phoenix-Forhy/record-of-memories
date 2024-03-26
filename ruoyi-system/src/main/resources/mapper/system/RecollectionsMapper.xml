@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.RecollectionsMapper">
+    
+    <resultMap type="Recollections" id="RecollectionsResult">
+        <result property="recollectionId"    column="recollection_id"    />
+        <result property="recollectionName"    column="recollection_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+    <resultMap type="RecollectionsVO" id="RecollectionsVOResult">
+            <result property="recollectionId"    column="recollection_id"    />
+            <result property="recollectionName"    column="recollection_name"    />
+            <result property="createByName"    column="create_by_name"    />
+            <result property="createBy"    column="create_by"    />
+            <result property="createTime"    column="create_time"    />
+            <result property="updateBy"    column="update_by"    />
+            <result property="updateTime"    column="update_time"    />
+            <result property="remark"    column="remark"    />
+        </resultMap>
+
+    <sql id="selectRecollectionsVo">
+        SELECT r.recollection_id AS recollection_id,
+               r.recollection_name AS recollection_name,
+               sdd.dict_label AS create_by_name,
+               r.create_by AS create_by,
+               r.create_time AS create_time,
+               r.update_by AS update_by,
+               r.update_time AS update_time,
+               r.remark AS remark
+        FROM recollections r
+        LEFT JOIN (
+            SELECT dict_value,dict_label
+            FROM sys_dict_data
+            WHERE dict_type = 'we'
+        ) sdd
+        ON r.create_by = sdd.dict_value
+    </sql>
+
+    <select id="selectRecollectionsList" parameterType="Recollections" resultMap="RecollectionsVOResult">
+        <include refid="selectRecollectionsVo"/>
+        <where>  
+            <if test="recollectionName != null  and recollectionName != ''"> and recollection_name like concat('%', #{recollectionName}, '%')</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectRecollectionsByRecollectionId" parameterType="Long" resultMap="RecollectionsResult">
+        <include refid="selectRecollectionsVo"/>
+        where recollection_id = #{recollectionId}
+    </select>
+        
+    <insert id="insertRecollections" parameterType="Recollections" useGeneratedKeys="true" keyProperty="recollectionId">
+        insert into recollections
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recollectionName != null and recollectionName != ''">recollection_name,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recollectionName != null and recollectionName != ''">#{recollectionName},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRecollections" parameterType="Recollections">
+        update recollections
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recollectionName != null and recollectionName != ''">recollection_name = #{recollectionName},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where recollection_id = #{recollectionId}
+    </update>
+
+    <delete id="deleteRecollectionsByRecollectionId" parameterType="Long">
+        delete from recollections where recollection_id = #{recollectionId}
+    </delete>
+
+    <delete id="deleteRecollectionsByRecollectionIds" parameterType="String">
+        delete from recollections where recollection_id in 
+        <foreach item="recollectionId" collection="array" open="(" separator="," close=")">
+            #{recollectionId}
+        </foreach>
+    </delete>
+</mapper>
