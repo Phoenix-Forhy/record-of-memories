@@ -89,6 +89,11 @@
                 <li>栖凰memory management正式发布！</li>
               </ol>
             </el-collapse-item>
+            <el-collapse-item title="v1.0.1 - 2024-4-17">
+              <ol>
+                <li>小小地修改了一下备注的查看样式，便于亲爱的小朋友的阅读，保护眼睛</li>
+              </ol>
+            </el-collapse-item>
           </el-collapse>
         </el-card>
       </el-col>
@@ -120,7 +125,7 @@ export default {
   data() {
     return {
       // 版本号
-      version: "1.0.0"
+      version: "1.0.1"
     };
   },
   methods: {

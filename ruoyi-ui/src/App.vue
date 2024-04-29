@@ -25,4 +25,7 @@ export default {
 #app .theme-picker {
   display: none;
 }
+body {
+  font-family: weiruan;
+}
 </style>

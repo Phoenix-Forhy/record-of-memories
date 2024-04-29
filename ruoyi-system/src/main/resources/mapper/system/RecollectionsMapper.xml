@@ -25,14 +25,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </resultMap>
 
     <sql id="selectRecollectionsVo">
-        SELECT r.recollection_id AS recollection_id,
-               r.recollection_name AS recollection_name,
-               sdd.dict_label AS create_by_name,
-               r.create_by AS create_by,
-               r.create_time AS create_time,
-               r.update_by AS update_by,
-               r.update_time AS update_time,
-               r.remark AS remark
+        SELECT r.recollection_id ,
+               r.recollection_name ,
+               sdd.dict_label ,
+               r.create_by ,
+               r.create_time ,
+               r.update_by ,
+               r.update_time ,
+               r.remark
         FROM recollections r
         LEFT JOIN (
             SELECT dict_value,dict_label

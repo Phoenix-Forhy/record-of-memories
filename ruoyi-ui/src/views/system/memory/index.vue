@@ -113,12 +113,15 @@
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark">
         <template slot-scope="scope">
-          <el-collapse v-model="scope.row.activeNames">
-            <el-collapse-item title="点击展开" name="1">
-              {{ scope.row.remark }}
-            </el-collapse-item>
-          </el-collapse>
+          <el-button type="text" @click="openRemark(scope.row.remark)">点击查看</el-button>
         </template>
+<!--        <template slot-scope="scope">-->
+<!--          <el-collapse v-model="scope.row.activeNames">-->
+<!--            <el-collapse-item title="点击展开" name="1">-->
+<!--              {{ scope.row.remark }}-->
+<!--            </el-collapse-item>-->
+<!--          </el-collapse>-->
+<!--        </template>-->
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -261,6 +264,20 @@ export default {
     this.getList();
   },
   methods: {
+    /*打开备注预览*/
+    openRemark(remarkContent) {
+      // 在控制台输出内容，以便验证
+      console.log(remarkContent);
+      this.$alert(remarkContent, '备注', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$message({
+            type: 'success',
+            message: `祝你天天开心嗷，我超喜欢你！`
+          });
+        }
+      });
+    },
     /** 查询回忆列表 */
     getList() {
       this.loading = true;
@@ -282,7 +299,7 @@ export default {
         this.total = response.total;
         this.loading = false;
         console.log("这是memory列表")
-        console.log(this.memoryList)
+        console.log(this.queryParams)
       });
     },
     // 取消按钮
@@ -381,3 +398,4 @@ export default {
   }
 };
 </script>
+
