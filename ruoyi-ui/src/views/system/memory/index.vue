@@ -196,6 +196,17 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <!-- 备注阅读框 -->
+    <el-dialog :title="title" :visible.sync="remarkOpen" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="备注" prop="remark" >
+          <el-input autosize v-model="form.remark" type="textarea" placeholder="请输入内容"  :disabled="true" :show-word-limit="true"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="remarkReturn">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -230,6 +241,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      remarkOpen: false,
       // 备注时间范围
       daterangeMemoryTime: [],
       // 备注时间范围
@@ -264,20 +276,7 @@ export default {
     this.getList();
   },
   methods: {
-    /*打开备注预览*/
-    openRemark(remarkContent) {
-      // 在控制台输出内容，以便验证
-      console.log(remarkContent);
-      this.$alert(remarkContent, '备注', {
-        confirmButtonText: '确定',
-        callback: action => {
-          this.$message({
-            type: 'success',
-            message: `祝你天天开心嗷，我超喜欢你！`
-          });
-        }
-      });
-    },
+
     /** 查询回忆列表 */
     getList() {
       this.loading = true;
@@ -358,6 +357,14 @@ export default {
         this.title = "修改回忆";
       });
     },
+    /*打开备注预览*/
+    openRemark(remarkContent) {
+      // 在控制台输出内容，以便验证
+      console.log(remarkContent);
+      this.form.remark = remarkContent;
+      this.remarkOpen = true;
+      this.title = "此刻的真实想法";
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -378,6 +385,10 @@ export default {
           }
         }
       });
+    },
+    remarkReturn(){
+      this.$modal.msgSuccess("祝你每天吃好睡好喝好，我还是很喜欢你！");
+      this.remarkOpen = false;
     },
     /** 删除按钮操作 */
     handleDelete(row) {

@@ -94,6 +94,11 @@
                 <li>小小地修改了一下备注的查看样式，便于亲爱的小朋友的阅读，保护眼睛</li>
               </ol>
             </el-collapse-item>
+            <el-collapse-item title="v1.0.2 - 2024-4-29">
+              <ol>
+                <li>再次修改备注样式，还是需要格式</li>
+              </ol>
+            </el-collapse-item>
           </el-collapse>
         </el-card>
       </el-col>
